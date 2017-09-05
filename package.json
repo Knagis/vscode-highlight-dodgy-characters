@@ -2,7 +2,7 @@
     "name": "highlight-dodgy-characters",
     "displayName": "Highlight Dodgy Characters",
     "description": "Highlight all non-unicode characters",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "publisher": "nachocab",
     "engines": {
         "vscode": "^1.15.0"
