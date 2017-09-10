@@ -14,6 +14,7 @@ function activate(context) {
   // European characters (http://fasforward.com/list-of-european-special-characters/)
   whitelist +=
     '¡¿äàáâãåǎąăæçćĉčđďðèéêëěęĝģğĥìíîïıĵķĺļłľñńňöòóôõőøœŕřẞßśŝşšșťţþțüùúûűũųůŵýÿŷźžż';
+  whitelist += '«»'; // guillemets
 
   // search for non-ascii characters that are not on the whitelist
   const charRegExp = `[^\x00-\x7F${whitelist}]`;
