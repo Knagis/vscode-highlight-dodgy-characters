@@ -1,4 +1,4 @@
-const vscode = require("vscode");
+const vscode = require('vscode');
 
 function activate(context) {
   const badCharDecorationType = vscode.window.createTextEditorDecorationType({
@@ -9,30 +9,41 @@ function activate(context) {
     borderColor: 'rgba(255,0,0,0.6)'
   });
 
-  const whitelist = '\n´\u0009' // allow newline, forward-tick and tabulator
+  let whitelist = '\n´\u0009'; // allow newline, forward-tick and tabulator
+  whitelist += '€£';
+  // European characters (http://fasforward.com/list-of-european-special-characters/)
+  whitelist +=
+    '¡¿äàáâãåǎąăæçćĉčđďðèéêëěęĝģğĥìíîïıĵķĺļłľñńňöòóôõőøœŕřẞßśŝşšșťţþțüùúûűũųůŵýÿŷźžż';
 
   // search for non-ascii characters that are not on the whitelist
-  const charRegExp = `[^\x00-\x7F${whitelist}]`
+  const charRegExp = `[^\x00-\x7F${whitelist}]`;
 
   let editor = vscode.window.activeTextEditor;
   if (editor) {
     triggerUpdateDecorations();
   }
 
-  vscode.window.onDidChangeActiveTextEditor(editor => {
-    editor = editor;
-    if (editor) {
-      triggerUpdateDecorations();
-    }
-  }, null, context.subscriptions);
+  vscode.window.onDidChangeActiveTextEditor(
+    editor => {
+      editor = editor;
+      if (editor) {
+        triggerUpdateDecorations();
+      }
+    },
+    null,
+    context.subscriptions
+  );
 
-  vscode.workspace.onDidChangeTextDocument(event => {
-    if (editor && event.document === editor.document) {
-      triggerUpdateDecorations();
-    }
-  }, null, context.subscriptions);
-  
-  
+  vscode.workspace.onDidChangeTextDocument(
+    event => {
+      if (editor && event.document === editor.document) {
+        triggerUpdateDecorations();
+      }
+    },
+    null,
+    context.subscriptions
+  );
+
   var timeout = null;
   function triggerUpdateDecorations() {
     if (timeout) {
@@ -49,10 +60,13 @@ function activate(context) {
     const text = editor.document.getText();
     const badChars = [];
     let match;
-    while (match = regEx.exec(text)) {
+    while ((match = regEx.exec(text))) {
       const startPos = editor.document.positionAt(match.index);
       const endPos = editor.document.positionAt(match.index + match[0].length);
-      const decoration = { range: new vscode.Range(startPos, endPos), hoverMessage: 'Bad char "**' + match[0] + '**"' };
+      const decoration = {
+        range: new vscode.Range(startPos, endPos),
+        hoverMessage: 'Bad char "**' + match[0] + '**"'
+      };
       badChars.push(decoration);
     }
     editor.setDecorations(badCharDecorationType, badChars);
