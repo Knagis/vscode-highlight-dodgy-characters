@@ -57,7 +57,7 @@ function activate(context) {
     if (!editor) {
       return;
     }
-    let regEx = new RegExp(charRegExp, 'g');
+    let regEx = new RegExp(charRegExp, 'gi');
     const text = editor.document.getText();
     const badChars = [];
     let match;
