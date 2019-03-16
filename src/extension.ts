@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { debounce } from 'lodash';
 
 export function activate(context: vscode.ExtensionContext) {
+  const configuration = vscode.workspace.getConfiguration('highlight-dodgy-characters');
   const badCharDecorationType = vscode.window.createTextEditorDecorationType({
     cursor: 'crosshair',
     backgroundColor: 'rgba(255,0,0,0.3)',
@@ -11,11 +12,7 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   let whitelist = '\n´\u0009'; // allow newline, forward-tick and tabulator
-  whitelist += '€£';
-  // European characters (http://fasforward.com/list-of-european-special-characters/)
-  whitelist +=
-    '¡¿äàáâãåǎąăæçćĉčđďðèéêëěęĝģğĥìíîïıĵķĺļłľñńňöòóôõőøœŕřẞßśŝşšșťţþțüùúûűũųůŵýÿŷźžż';
-  whitelist += '«»'; // guillemets
+  whitelist += configuration.whitelist;
 
   // search for non-ascii characters that are not on the whitelist
   const charRegExp = `[^\x00-\x7F${whitelist}]`;
