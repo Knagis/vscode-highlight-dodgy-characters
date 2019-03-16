@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { debounce } from 'lodash';
 
 export function activate(context: vscode.ExtensionContext) {
   const badCharDecorationType = vscode.window.createTextEditorDecorationType({
@@ -19,44 +20,30 @@ export function activate(context: vscode.ExtensionContext) {
   // search for non-ascii characters that are not on the whitelist
   const charRegExp = `[^\x00-\x7F${whitelist}]`;
 
-  let editor = vscode.window.activeTextEditor;
-  if (editor) {
-    triggerUpdateDecorations();
-  }
+  // execute function on the leading edge of the debounce -> only defer subsequent calls
+  const triggerUpdateDecorations = debounce(updateDecorations, 500, { leading: true });
+
+  triggerUpdateDecorations();
 
   vscode.window.onDidChangeActiveTextEditor(
-    editor => {
-      editor = editor;
-      if (editor) {
-        triggerUpdateDecorations();
-      }
-    },
+    editor => triggerUpdateDecorations(editor),
     null,
     context.subscriptions
   );
 
   vscode.workspace.onDidChangeTextDocument(
     event => {
-      if (editor && event.document === editor.document) {
-        triggerUpdateDecorations();
-      }
+      const editor = vscode.window.activeTextEditor;
+      if (editor && editor.document === event.document) triggerUpdateDecorations(editor);
     },
     null,
     context.subscriptions
   );
 
-  var timeout = null;
-  function triggerUpdateDecorations() {
-    if (timeout) {
-      clearTimeout(timeout);
-    }
-    timeout = setTimeout(updateDecorations, 500);
-  }
+  function updateDecorations(editor: vscode.TextEditor | void) {
+    if (!editor) editor = vscode.window.activeTextEditor;
+    if (!editor) return;
 
-  function updateDecorations() {
-    if (!editor) {
-      return;
-    }
     let regEx = new RegExp(charRegExp, 'gi');
     const text = editor.document.getText();
     const badChars = [];
