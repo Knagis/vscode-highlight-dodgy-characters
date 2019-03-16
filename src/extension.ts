@@ -48,12 +48,13 @@ export function activate(context: vscode.ExtensionContext) {
     const text = editor.document.getText();
     const badChars = [];
     let match;
-    while ((match = regEx.exec(text))) {
+    while (match = regEx.exec(text)) {
       const startPos = editor.document.positionAt(match.index);
       const endPos = editor.document.positionAt(match.index + match[0].length);
+      const hexCharCode = match[0].charCodeAt(0).toString(16);
       const decoration = {
         range: new vscode.Range(startPos, endPos),
-        hoverMessage: 'Bad char "**' + match[0] + '**"'
+        hoverMessage: `Bad character: [${hexCharCode}](https://unicode.org/cldr/utility/character.jsp?a=${hexCharCode})`
       };
       badChars.push(decoration);
     }
