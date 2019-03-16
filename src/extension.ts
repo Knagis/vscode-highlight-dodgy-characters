@@ -11,7 +11,7 @@ export function activate(context: vscode.ExtensionContext) {
     borderColor: 'rgba(255,0,0,0.6)'
   });
 
-  let whitelist = '\n´\u0009'; // allow newline, forward-tick and tabulator
+  let whitelist = '\n\u0009'; // allow newline and tabulator
   whitelist += configuration.whitelist;
 
   // search for non-ascii characters that are not on the whitelist
