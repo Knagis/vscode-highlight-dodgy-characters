@@ -1,22 +1,18 @@
-//
-// Note: This example test is leveraging the Mocha test framework.
-// Please refer to their documentation on https://mochajs.org/ for help.
-//
-
-// The module 'assert' provides assertion methods from node
 import * as assert from 'assert';
-
-// You can import and use all API from the 'vscode' module
-// as well as import your extension to test it
-// import * as vscode from 'vscode';
-// import * as myExtension from '../extension';
+import * as vscode from 'vscode'
+import * as highlightChars from '../extension'
 
 // Defines a Mocha test suite to group tests of similar kind together
 suite("Extension Tests", function () {
 
-    // Defines a Mocha unit test
-    test("Something 1", function() {
-        assert.equal(-1, [1, 2, 3].indexOf(5));
-        assert.equal(-1, [1, 2, 3].indexOf(0));
+    test("Should highlight bad characters in example file", () => {
+        const editor = vscode.window.activeTextEditor;
+        assert.ok(editor);
+        const decorations = highlightChars.createDecorations(<vscode.TextEditor>editor);
+        // the example file contains 18 dodgy characters
+        assert.equal(decorations.length, 18);
+        // make sure the first two decorators are where they should be
+        assert.deepEqual(decorations[0].range.start, { _line: 0, _character: 18 });
+        assert.deepEqual(decorations[1].range.start, { _line: 1, _character: 19 });
     });
 });
