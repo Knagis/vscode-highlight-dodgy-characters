@@ -2,7 +2,7 @@
   "name": "highlight-dodgy-characters",
   "displayName": "Highlight Dodgy Characters",
   "description": "Highlight all non-unicode characters",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "publisher": "nachocab",
   "engines": {
     "vscode": "^1.32.0"
@@ -14,6 +14,22 @@
     "*"
   ],
   "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "Highlight Dodgy Characters",
+      "properties": {
+        "highlight-dodgy-characters.whitelist": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": "´€£¡¿äàáâãåǎąăæçćĉčđďðèéêëěęĝģğĥìíîïıĵķĺļłľñńňöòóôõőøœŕřẞßśŝşšșťţþțüùúûűũųůŵýÿŷźžż",
+          "description": "Specifies the whitelisted characters that should not be highlighted."
+        }
+      }
+    }
+  },
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
@@ -31,5 +47,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/nachocab/vscode-highlight-dodgy-characters"
+  },
+  "dependencies": {
+    "@types/lodash": "^4.14.123",
+    "lodash": "^4.17.11"
   }
 }
