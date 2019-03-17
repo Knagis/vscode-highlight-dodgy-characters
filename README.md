@@ -16,3 +16,7 @@ You can override the whitelist of characters that will not be highlighted in you
 ```
 "highlight-dodgy-characters.whitelist": "´€£¡¿äàáâãåǎąăæçćĉčđďðèéêëěęĝģğĥìíîïıĵķĺļłľñńňöòóôõőøœŕřẞßśŝşšșťţþțüùúûűũųůŵýÿŷźžż"
 ```
+
+### Examples
+
+An example file that contains dodgy characters can be found [here](./src/test/examples.txt)
