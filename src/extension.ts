@@ -1,6 +1,6 @@
-const vscode = require('vscode');
+import * as vscode from 'vscode';
 
-function activate(context) {
+export function activate(context: vscode.ExtensionContext) {
   const badCharDecorationType = vscode.window.createTextEditorDecorationType({
     cursor: 'crosshair',
     backgroundColor: 'rgba(255,0,0,0.3)',
@@ -73,5 +73,3 @@ function activate(context) {
     editor.setDecorations(badCharDecorationType, badChars);
   }
 }
-exports.activate = activate;
-//# sourceMappingURL=extension.js.map
